@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>首页登录</title>
+    <style>
+        .title form {
+            text-align: center;
+        }
+
+        .pop {
+            position: absolute;
+            width: 300px;
+            border: 1px solid #ddd;
+        }
+
+        .pop header {
+            padding-left: 10px;
+            height: 40px;
+            line-height: 40px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .pop .content {
+            padding: 15px;
+            min-height: 100px;
+        }
+
+        .pop .btn-close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 10px;
+        }
+
+        .pop .btn-close:hover {
+            background-color: #f00;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>欢迎进入登录页面</h1>
+    <div class="pop">
+        <header>
+            注册登录
+        </header>
+        <div class="content">
+            <div class="title">
+                <form action="">
+                    <p>
+                        <label for="username">用户名</label>
+
+                        <input type="text" id="username" name="username" placeholder="用户名">
+                    </p>
+                    <p>
+                        <label for="psw">密 &nbsp; 码</label>
+
+                        <input type="password" id="psw" name="psw" placeholder="请输入密码">
+                    </p>
+                    <label>
+                        <input type="checkbox" name="autoLogin" /> 自动登录
+                    </label>
+                    <div class="tips">
+                        同意 <a href="">保密协议</a>
+                    </div>
+                    <button id="btn" disabled>登录</button>
+                </form>
+            </div>
+        </div>
+        <span class="btn-close">&times;</span>
+    </div>
+
+    <div id="info"></div>
+    <script>
+        window.onload = function () {
+
+            // 获取元素
+            var autoLogin = document.getElementsByName('autoLogin')[0];
+            var tips = document.getElementsByClassName('tips')[0];
+            var btn = document.getElementById('btn');
+            var username = document.getElementById('username');
+            var password = document.getElementById('psw');
+            var pop = document.getElementsByClassName('pop')[0];
+            var title = pop.getElementsByTagName('header')[0];
+            var btnClose = pop.getElementsByClassName('btn-close')[0];
+            // 给弹窗绑定mousedown事件
+            title.onmousedown = function (evt) {
+                // 保存按下时光标距离header的距离
+                var ox = evt.offsetX;
+                var oy = evt.offsetY;
+
+                // 在mousedown事件中给document绑定mousemove事件
+                document.onmousemove = function (e) {
+                    pop.style.left = e.clientX - ox + 'px';
+                    pop.style.top = e.clientY - oy + 'px';
+
+                    e.preventDefault();
+                }
+
+                evt.stopPropagation();
+            }
+            // 鼠标弹起后清除document的mousemove事件
+			title.onmouseup = function () {
+				document.onmousemove = null;
+            }
+            
+			// 关闭
+			btnClose.onmousedown = function (e) {
+				pop.style.display = 'none';
+
+				// 阻止事件冒泡只能阻止同类事件
+				e.stopPropagation();
+            }
+            // 水平/垂直方向
+			// 用于判定改变弹窗的属性
+			var xDirection;
+            var yDirection;
+            // * 确定水平/垂直方向上的位置
+			document.onmousemove = moveHandle
+            document.onmousedown = function (e) {
+				e = e || window.event;
+				// 初始位置
+				var startLeft = e.clientX;
+				var startTop = e.clientY;
+
+				// 初始宽高
+				var startWidth = pop.offsetWidth;
+				var startHeight = pop.offsetHeight;
+
+				// 按下并移动鼠标
+				document.onmousemove = function (evt) {
+					evt = evt || window.event;
+
+					// 计算移动的距离
+					var oWidth = evt.clientX - startLeft;
+					var oHeight = evt.clientY - startTop;
+
+					// 在弹窗左侧移动时
+					if (xDirection == 'left') {
+						pop.style.left = startLeft + oWidth + 'px';
+						pop.style.width = startWidth - oWidth + 'px';
+					}
+
+					// 在弹窗右侧移动时
+					else if (xDirection == 'right') {
+						pop.style.width = startWidth + oWidth + 'px';
+					}
+
+					// 在弹窗上边移动时
+					if (yDirection == 'top') {
+						pop.style.top = startTop + oHeight + 'px';
+						pop.style.height = startHeight - oHeight + 'px';
+					}
+
+					// 在弹窗下边移动
+					else if (yDirection == 'bottom') {
+						pop.style.height = startHeight + oHeight + 'px';
+					}
+
+					// 阻止文字选中
+					evt.preventDefault();
+				}
+
+
+			}
+
+
+
+            autoLogin.onchange = function () {
+                // 判断复选框的勾选状态
+                console.log('checked', this.checked);
+                if (this.checked) {
+                    tips.style.display = 'none';
+                    btn.disabled = false;
+                } else {
+                    tips.style.display = 'block';
+                    btn.disabled = true;
+                }
+            }
+            btn.onclick = function () {
+                //   点击按钮验证表单
+                // 用户名
+                var _username = username.value;
+
+                // 长度不低于6，不高于20
+                if (_username.length < 6 || _username.length > 20) {
+                    alert('用户名长度不合法');
+
+                    // 不提交表单
+                    return false;
+                }
+                // 数字不可以开头
+                // isNaN()
+                if (!isNaN(_username[0])) {
+                    alert('用户名第一个字符不能为数字');
+                    return false;
+                }
+                // 用户名只能包含数字、字母和下划线
+                var str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                for (var i = 0; i < _username.length; i++) {
+                    if (str.indexOf(_username[i]) === -1) {
+                        alert('用户名只能包含数字、字母和下划线');
+                        return false;
+                    }
+                }
+                if (password.value.trim() == '') {
+                    alert('密码不能为空');
+                    return false;
+                }
+                // 当所有条件都满足后,把用户名和昵称写入#info
+                info.innerHTML = '用户名为：' + _username + ', 昵称：' + _nickname;
+
+                return false;
+            }
+           
+        }
+    </script>
+</body>
+
+</html>

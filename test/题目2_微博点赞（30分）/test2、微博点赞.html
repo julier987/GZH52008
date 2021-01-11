@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微博点赞</title>
+
+    <style>
+        #box {
+            width: 700px;
+            height: 80px;
+            border-bottom: 2px solid black;
+        }
+
+        #box a {
+            text-decoration: none;
+            color: black;
+            font-size: 22px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>微博点赞</h1>
+    <div id="box">
+        <a href="">老谢</a>
+        <span>2020年12月12日</span>
+        <p>
+            说说最让人热血沸腾的一句话，我先来：不逼自己一把，你永远都不知道自己有多优秀
+        </p>
+    </div>
+    <input type="text" id="news"><button id="btnAdd">添加</button>
+    <ul id="comment"></ul>
+    <script>
+        /**
+         * 1.初始化：根据数据生成结构
+           2.点赞：点击点赞按钮实现点赞数量+1
+           3.评论：点击评论按钮显示/隐藏表单
+           4.发送消息：
+            。点击提交按钮，发送消息。ctrl+回车发送消息
+            。消息格式：名字+内容+时间（时间格式：2020-12-1510：50：23）
+            。每发送一条消息，评论数量+1*/
+
+        window.onload = function () {
+            // 数据
+            var arrNews = [{
+                "name": "laoxie",
+                "content": "说说最让人热血沸腾的一句话，我先来：不逼自己一把，你永远都不知道自己有多优秀",
+                "time": "2020-11-11 12:12:20",
+                "zan": 1,
+                "comment": [{
+                        "name": "小谢",
+                        "con": "你可以上二流的大学，但不能过二流的人生",
+                        "time": "2020-12-5 12:12:20"
+                    },
+                    {
+                        "name": "tiantian",
+                        "con": "你不能拼爹，所以只能拼命",
+                        "time": "2020-12-6 08:20:23"
+                    },
+                    {
+                        "name": "静静",
+                        "con": "你不能想别的，你只能想我",
+                        "time": "2020-12-7 18:34:56"
+                    }
+                ]
+            }]
+            // 获取页面元素
+            var news = document.querySelector('#new')
+            var btnAdd = document.querySelector('#btnAdd');
+            var comment = document.querySelector('#comment');
+            showNews();
+
+            function showNews() {
+                var html = '';
+                arrNews.forEach(function (item, idx) {
+                    html += '<li><a href="#">' + item.name + '</a>' + item.time +'</br>'+item.content+'</li>';
+                });
+                box.innerHTML = html;
+
+            }
+            btnAdd.onclick = function () {
+
+            }
+
+
+        }
+    </script>
+</body>
+
+</html>

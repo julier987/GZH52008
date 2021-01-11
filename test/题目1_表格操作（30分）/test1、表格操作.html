@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test1:表格操作</title>
+    <h1>test1:表格操作</h1>
+    <style>
+        button {
+            width: 60px;
+        }
+
+        table {
+            margin-top: 20px;
+            width: 700px;
+            border: 1px solid #ddd;
+            border-collapse: collapse;
+        }
+
+        table tr.odd {
+            background-color: pink;
+        }
+
+        td,
+        th {
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+        }
+
+        td {
+            padding: 0;
+            height: 30px;
+            text-align: center;
+        }
+
+        .active {
+            background: rgba(85, 124, 0.3);
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td>
+                <input type="checkbox">
+            </td>
+            <td>#</td>
+            <td>姓名</td>
+            <td>昵称</td>
+            <td>年龄</td>
+            <td>性别</td>
+            <td>爱好</td>
+            <td>操作</td>
+        </tr>
+
+    </table>
+
+    <!-- <script>
+        // 
+        window.onload = function () {
+            /*
+        要求：
+              1.根据数据生成表格
+              2.全选/不选
+              3.点击任意单元格选中当前行并勾选复选框
+              4.选中时表格行高亮5.删除表格行，自动更新行号
+        */
+            for (var i = 0; i < jsonData.length; i++) {
+                jsonData[i]["序号"] = i + 1;
+            }
+
+            //创建一个table
+            var table = document.createElement('table');
+            // 创建theader,并追加到table中
+            var thead = document.createElement('thead');
+            table.appendChild(thead);
+
+            //创建tr,并追加到thead
+            var tr = document.createElement('tr');
+            thead.appendChild(tr);
+
+
+            // 遍历json文件，生成表单元素
+            //json数组中第1个人的每个属性
+            for (var key in jsonData[0]) {
+                //创建th
+                var th = document.createElement('th');
+
+
+                //设置th的内容为key
+                th.innerHTML = key;
+                //将th追加到tr中
+                tr.appendChild(th);
+            }
+            //创建tbody元素
+            var tbody = document.createElement('tbody');
+            //将tbody追加到table中
+            table.appendChild(tbody);
+            //遍历json中所有人
+            for (var i = 0; i < jsonData.length; i++) {
+                //创建tr
+                var tr = document.createElement('tr');
+                //遍历当前的每个属性
+                for (var key in jsonData[i]) {
+                    //创建td
+                    var td = document.createElement('td');
+                    //设置td的内容为当前员工的当前属性值
+                    td.innerHTML = jsonData[i][key];
+                    //将td追加到tr
+                    tr.appendChild(td);
+
+                } //(遍历结束)
+                //将tr追加到tbody中
+                tbody.appendChild(tr);
+            }
+            //将table添加到id为data的div下
+            document.getElementById('data').appendChild(table);
+
+
+
+        }
+    </script> -->
+</body>
+
+<script src="./data.json"></script>
+<script>
+    // 获取元素
+    var tbody = document.querySelector('tbody');
+    var table = document.querySelector('table');
+
+    var datalength = Object.values(jsonData[0]).length + 3;
+    // 根据数据生成表格
+    var html;
+    for (var i = 0; i < jsonData.length; i++) {
+        html = `
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>${i+1}</td>
+            <td>${jsonData[i].name}</td>
+            <td>${jsonData[i].nickname}</td>
+            <td>${jsonData[i].age}</td>
+            <td>${jsonData[i].gender}</td>
+            <td>${jsonData[i].hobby}</td>
+            <td><button>删除</button></td>
+        </tr>
+            `;
+        tbody.innerHTML += html;
+    }
+    var tr = document.querySelectorAll('tr');
+    var td = document.querySelectorAll("td");
+
+
+    // 高亮
+    tbody.onclick = function (e) {
+        e = e || window.event;
+        var target = e.target || e.srcElement;
+        console.log(target);
+
+
+        if (target.tagName.toLowerCase() === 'td') {
+            var currentTd = target.parentElement;
+
+            console.log("target.tagName=", target.tagName)
+            target.parentElement.className = 'active';
+
+            for (var i = 0; i < tr[i].children; i++) {
+                tbody.children[i].className = '';
+            }
+
+        }
+        if (target.tagName.toLowerCase() === "input") {
+            console.log("target.tagName=", target.tagName)
+            target.parentElement.parentElement.className = 'active';
+        }
+
+    }
+</script>
+
+</html>
